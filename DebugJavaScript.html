@@ -27,25 +27,31 @@
     <p id="result"></p>
     
     <script>
-
         function calculateMortgage() {
-            // Get the initial amount from the principal box
-            const principal = document.getElementById("principle").value;
+            // Get the initial amount from the principal box and convert to number
+            const principal = parseFloat(document.getElementById("principal").value);
 
-            // update rate from the box
-            let rate;
-            rate = document.getElementById("rate").value / 100;
-            // get the years to calculate
-            const years = document.getElementById("years").value;
+            // Update rate from the box and convert to a decimal
+            let rate = parseFloat(document.getElementById("rate").value) / 100;
 
-            // Call the power funtion, pow, from Math
-            const monthlyRate = Math.pw(1 + rate, years * 12);
+            // Get the years to calculate and convert to number
+            const years = parseInt(document.getElementById("years").value, 10);
+
+            // Check if any of the inputs are invalid
+            if (isNaN(principal) || isNaN(rate) || isNaN(years)) {
+                document.getElementById("result").innerText = "Please enter valid numbers for all fields.";
+                return;
+            }
 
             if (rate === 0) {
                 document.getElementById("result").innerText = "Interest rate cannot be zero.";
                 return;
             }
 
+            // Call the power function, pow, from Math
+            const monthlyRate = Math.pow(1 + rate, years * 12);
+
+            // Calculate the monthly payment
             const monthlyPayment = (principal * rate * monthlyRate) / (monthlyRate - 1);
             document.getElementById("result").innerText = `Your monthly payment is $${monthlyPayment.toFixed(2)}`;
         }
